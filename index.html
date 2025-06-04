@@ -1,174 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LimeLine</title>
+  <meta charset="UTF-8">
+  <title>LimeLine – Deadline Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    :root {
-      --lime-50: #f7fee7;
-      --lime-100: #ecfccb;
-      --lime-200: #d9f99d;
-      --lime-300: #bef264;
-      --lime-400: #a3e635;
-      --lime-500: #84cc16;
-      --lime-600: #65a30d;
-      --lime-700: #4d7c0f;
-      --lime-800: #3f6212;
-      --lime-900: #365314;
-    }
-
     body {
-      margin: 0;
+      background-color: #f4fff0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: var(--lime-50);
-      color: var(--lime-800);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      color: #333;
     }
 
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-
-    .card {
-      background-color: var(--lime-100);
-      border: 2px solid var(--lime-200);
-      border-radius: 1rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      max-width: 420px;
-      width: 100%;
-      padding: 2rem;
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #e7ffe0;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     h1 {
-      font-size: 1.5rem;
-      color: var(--lime-900);
-      margin-bottom: 1rem;
       text-align: center;
+      color: #3a7e3a;
     }
 
     label {
       display: block;
-      margin: 0.5rem 0 0.25rem;
-      font-weight: 500;
+      margin-top: 15px;
+      font-weight: bold;
     }
 
-    input[type="number"],
-    input[type="datetime-local"] {
+    input {
       width: 100%;
-      padding: 0.5rem;
-      border: 1px solid var(--lime-300);
-      border-radius: 0.5rem;
-      background-color: var(--lime-50);
-      color: var(--lime-800);
-      font-size: 1rem;
-    }
-
-    .row {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .row > div {
-      flex: 1;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
     }
 
     button {
-      width: 100%;
-      background-color: var(--lime-600);
-      color: white;
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #b2e79c;
       border: none;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 0.75rem;
-      margin-top: 1rem;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: var(--lime-700);
+      background-color: #a1d98d;
     }
 
-    .result {
-      margin-top: 1.5rem;
-      font-weight: bold;
-      color: var(--lime-800);
-      text-align: center;
+    .results {
+      margin-top: 25px;
+      background: #f0fff4;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #c8ebc3;
     }
 
     footer {
       text-align: center;
-      padding: 1rem 0;
-      font-size: 0.9rem;
-      background-color: var(--lime-100);
-      color: var(--lime-600);
+      margin-top: 50px;
+      padding: 20px;
+      background-color: #dfffd9;
+      color: #555;
+      font-size: 14px;
+      border-top: 1px solid #ccebc1;
     }
   </style>
 </head>
 <body>
-  <main>
-    <div class="card">
-      <h1>LimeLine</h1>
+  <div class="container">
+    <h1>LimeLine</h1>
 
-      <label for="startDate">Start Date & Time</label>
-      <input type="datetime-local" id="startDate" />
+    <label for="start">Start Time:</label>
+    <input type="datetime-local" id="start">
 
-      <div class="row">
-        <div>
-          <label for="days">Add Days</label>
-          <input type="number" id="days" placeholder="e.g. 2" />
-        </div>
-        <div>
-          <label for="hours">Add Hours</label>
-          <input type="number" id="hours" placeholder="e.g. 5" />
-        </div>
-      </div>
+    <label for="days">Add Days:</label>
+    <input type="number" id="days" value="0" min="0">
 
-      <button onclick="calculateDeadline()">Check Deadline</button>
+    <label for="hours">Add Hours:</label>
+    <input type="number" id="hours" value="0" min="0">
 
-      <div id="result" class="result"></div>
-    </div>
-  </main>
+    <button onclick="calculateDeadline()">Check Deadline</button>
 
-  <footer>
-    &copy; 2025 LimeLine. All rights reserved.
-  </footer>
+    <div class="results" id="output"></div>
+  </div>
+
+  <footer>&copy; 2025 LimeLine</footer>
 
   <script>
     function calculateDeadline() {
-      const startInput = document.getElementById("startDate").value;
-      const days = parseFloat(document.getElementById("days").value) || 0;
-      const hours = parseFloat(document.getElementById("hours").value) || 0;
+      const startInput = document.getElementById("start").value;
+      const days = parseInt(document.getElementById("days").value, 10) || 0;
+      const hours = parseInt(document.getElementById("hours").value, 10) || 0;
+      const output = document.getElementById("output");
 
-      const startTime = new Date(startInput);
-      if (isNaN(startTime.getTime())) {
-        document.getElementById("result").textContent = "⚠️ Please enter a valid start date and time.";
+      if (!startInput) {
+        output.innerHTML = "<strong>Please enter a start time.</strong>";
         return;
       }
 
-      const deadline = new Date(startTime.getTime() + (days * 24 + hours) * 3600 * 1000);
+      const startTime = new Date(startInput);
+      const deadline = new Date(startTime.getTime() + (days * 24 + hours) * 60 * 60 * 1000);
       const now = new Date();
 
-      const diff = deadline.getTime() - now.getTime();
-      const resultBox = document.getElementById("result");
+      const deadlineStr = deadline.toLocaleString();
+
+      let message = `<strong>Deadline:</strong> ${deadlineStr}<br>`;
+
+      const diff = now - deadline;
 
       if (diff > 0) {
-        const hoursLeft = Math.floor(diff / (1000 * 60 * 60));
-        const minutesLeft = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        resultBox.textContent = `🕒 Deadline is in ${hoursLeft} hours and ${minutesLeft} minutes.\n🗓️ Exact Deadline: ${deadline.toLocaleString()}`;
+        message += `<strong>Deadline passed:</strong> ${displayTimeDifference(diff)} ago.`;
       } else {
-        const past = Math.abs(diff);
-        const hoursPast = Math.floor(past / (1000 * 60 * 60));
-        const minutesPast = Math.floor((past % (1000 * 60 * 60)) / (1000 * 60));
-        resultBox.textContent = `⚠️ Deadline passed ${hoursPast} hours and ${minutesPast} minutes ago.\n🗓️ Deadline was: ${deadline.toLocaleString()}`;
+        message += `<strong>Time remaining:</strong> ${displayTimeDifference(Math.abs(diff))}.`;
       }
+
+      output.innerHTML = message;
+    }
+
+    function displayTimeDifference(ms) {
+      const totalMinutes = Math.floor(ms / 60000);
+      const totalHours = Math.floor(totalMinutes / 60);
+      const days = Math.floor(totalHours / 24);
+      const hours = totalHours % 24;
+      const minutes = totalMinutes % 60;
+
+      const parts = [];
+      if (days >= 1) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+      if (totalHours >= 1) parts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+      if (minutes >= 1) parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
+
+      return parts.length ? parts.join(', ') : "less than a minute";
     }
   </script>
 </body>
